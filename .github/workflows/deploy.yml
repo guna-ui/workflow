@@ -31,11 +31,14 @@ jobs:
       - name: Output information
         run: |
              echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
+      - name : set output username
+        id  : set-username
+        run : echo "::set-output name:username::${{env.MONGODB_USERNAME}}"
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Output information
         run: |        
-          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
+          USERNAME="${{ needs.test.outputs.username }}"
           echo "MONGODB_DB_NAME: $MONGO_DB_NAME"
