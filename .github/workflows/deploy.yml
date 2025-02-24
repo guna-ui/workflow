@@ -6,6 +6,7 @@ on:
       - dev
 env:
   MONGO_DB_NAME: gha-demo
+
 jobs:
   test:
     env:
@@ -14,26 +15,34 @@ jobs:
       MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
     runs-on: ubuntu-latest
+    outputs:
+      username: ${{ steps.set-username.outputs.username }}  # Define the output
     steps:
       - name: Get Code
         uses: actions/checkout@v3
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run server
         run: npm start & npx wait-on http://127.0.0.1:$PORT
+
       - name: Run tests
         run: npm test
+
       - name: Output information
         run: |
           echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
-      - name: set output username
+
+      - name: Set output username
         id: set-username
-        run: echo "username=${{env.MONGODB_USERNAME}}" >> $GITHUB_OUTPUT
+        run: echo "username=${{ env.MONGODB_USERNAME }}" >> $GITHUB_OUTPUT
 
   deploy:
     needs: test
@@ -43,4 +52,4 @@ jobs:
         run: |
           USERNAME="${{ needs.test.outputs.username }}"
           echo "MONGODB_USERNAME: $USERNAME"
-          echo "MONGODB_DB_NAME: ${{ env.MONGO_DB_NAME }}"
+          echo "MONGO_DB_NAME: ${{ env.MONGO_DB_NAME }}"
