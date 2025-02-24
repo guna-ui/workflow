@@ -41,7 +41,8 @@ jobs:
           echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
 
       - name: Debug MONGODB_USERNAME
-        run: echo "MONGODB_USERNAME is: ${{ env.MONGODB_USERNAME }}"
+        run: | 
+          echo "MONGODB_USERNAME is: ${{ env.MONGODB_USERNAME }}"
 
       - name: Set output username
         id: set-username
