@@ -16,7 +16,7 @@ jobs:
       PORT: 8080
     runs-on: ubuntu-latest
     outputs:
-      username: ${{ steps.set-username.outputs.username }}  # Define the output
+      username: ${{ steps.set-username.outputs.username }}
     steps:
       - name: Get Code
         uses: actions/checkout@v3
@@ -38,7 +38,10 @@ jobs:
 
       - name: Output information
         run: |
-          echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
+          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
+
+      - name: Debug MONGODB_USERNAME
+        run: echo "MONGODB_USERNAME is: ${{ env.MONGODB_USERNAME }}"
 
       - name: Set output username
         id: set-username
@@ -50,6 +53,7 @@ jobs:
     steps:
       - name: Output information
         run: |
+          echo "Direct output: ${{ needs.test.outputs.username }}"
           USERNAME="${{ needs.test.outputs.username }}"
           echo "MONGODB_USERNAME: $USERNAME"
           echo "MONGO_DB_NAME: ${{ env.MONGO_DB_NAME }}"
