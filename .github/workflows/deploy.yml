@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       username: ${{ steps.set-username.outputs.username }}
+      port    : ${{steps.set-port.outputs.port}}
     steps:
       - name: Get Code
         uses: actions/checkout@v3
@@ -47,6 +48,10 @@ jobs:
       - name: Set output username
         id: set-username
         run: echo "username=${{ env.MONGODB_USERNAME }}" >> $GITHUB_OUTPUT
+      - name : sample username
+        id   : set-port
+        run  : |
+            echo "port= ${{env.PORT}}" >> $GITHUB_OUTPUT
 
   deploy:
     needs: test
@@ -58,3 +63,8 @@ jobs:
           USERNAME="${{ needs.test.outputs.username }}"
           echo "MONGODB_USERNAME: $USERNAME"
           echo "MONGO_DB_NAME: ${{ env.MONGO_DB_NAME }}"
+          echo "PORTNUMBER : ${{needs.test.outputs.port}}"
+          PORT="${{needs.test.outputs.port}}"
+          echo "PORT_NUMBER: $PORT"
+
+
