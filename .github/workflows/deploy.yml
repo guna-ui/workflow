@@ -4,15 +4,15 @@ on:
     branches:
       - main
       - dev
-env :
-  MONGO_DB_NAME : gha-demo
+env:
+  MONGO_DB_NAME: gha-demo
 jobs:
   test:
-    env : 
-      MONGODB_CLUSTER_ADDRESS : cluster0.0whp0.mongodb.net
-      MONGODB_USERNAME  : ${{secrets.MONGODB_USERNAME}}
-      MONGODB_PASSWORD  : ${{secrets.MONGODB_PASSWORD}}
-      PORT              : 8080
+    env:
+      MONGODB_CLUSTER_ADDRESS: cluster0.0whp0.mongodb.net
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      PORT: 8080
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -30,16 +30,17 @@ jobs:
         run: npm test
       - name: Output information
         run: |
-             echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
-      - name : set output username
-        id  : set-username
-        run : echo "username=${{env.MONGODB_USERNAME}}" >> $GITHUB_OUTPUT
+          echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
+      - name: set output username
+        id: set-username
+        run: echo "username=${{env.MONGODB_USERNAME}}" >> $GITHUB_OUTPUT
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        run: |        
+        run: |
           USERNAME="${{ needs.test.outputs.username }}"
-          echo "MONGODB-USERNAME: $USERNAME"
-          echo "MONGODB_DB_NAME: $MONGO_DB_NAME"
+          echo "MONGODB_USERNAME: $USERNAME"
+          echo "MONGODB_DB_NAME: ${{ env.MONGO_DB_NAME }}"
