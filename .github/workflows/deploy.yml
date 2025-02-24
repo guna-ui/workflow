@@ -33,7 +33,7 @@ jobs:
              echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME }}"
       - name : set output username
         id  : set-username
-        run : echo "::set-output name:username::${{env.MONGODB_USERNAME}}"
+        run : echo "username=${{env.MONGODB_USERNAME}}" >> $GITHUB_OUTPUT
   deploy:
     needs: test
     runs-on: ubuntu-latest
