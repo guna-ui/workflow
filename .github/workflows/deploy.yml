@@ -41,4 +41,5 @@ jobs:
       - name: Output information
         run: |        
           USERNAME="${{ needs.test.outputs.username }}"
+          echo "MONGODB-USERNAME: $USERNAME"
           echo "MONGODB_DB_NAME: $MONGO_DB_NAME"
