@@ -1,9 +1,21 @@
 name    : resuable workflow
 on      : 
-     workflow_call
+     workflow_call:
+      inputs :
+        artifact-name:
+            description : The name of deployable artifact file
+            required    : false
+            default     : dist
+            type        : string
 jobs    :
   deploy:
     runs-on : ubunut-latest
     steps   :
+      - name : Get code
+        uses : actions/download-artifact@v3
+        with :
+          name : ${{inputs.artifact-name}}
+      - name : outputing the files
+        run  : ls
       - name : outputing information
         run  : echo "Deploying and uploading ..."
