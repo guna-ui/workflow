@@ -7,15 +7,24 @@ on      :
             required    : false
             default     : dist
             type        : string
+      outputs :
+        result :
+          description : The result of deployment file
+          value       : ${{jobs.deploy.outputs}}
 jobs    :
   deploy:
+    outputs : 
+        outcome : ${{steps.set-results.outputs.output}}
     runs-on : ubuntu-latest
     steps   :
-      - name : Get code
-        uses : actions/download-artifact@v4
-        with :
-          name : ${{inputs.artifact-name}}
-      - name : outputing the files
-        run  : ls
-      - name : outputing information
-        run  : echo "Deploying and uploading ..."
+        - name : Get code
+          uses : actions/download-artifact@v4
+          with :
+           name : ${{inputs.artifact-name}}
+        - name : outputing the files
+          run  : ls
+        - name : outputing information
+          run  : echo "Deploying and uploading ..."
+        - name : set result output
+          id   : set-results
+          run  : echo "output=success" >> $GITHUB_OUTPUT
