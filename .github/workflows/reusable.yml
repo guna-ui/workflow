@@ -10,11 +10,11 @@ on      :
       outputs :
         result :
           description : The result of deployment file
-          value       : ${{jobs.deploy.outputs}}
+          value       : ${{jobs.deploy.outputs.outcome}}
 jobs    :
   deploy:
     outputs : 
-        outcome : ${{steps.set-results.outputs.output}}
+        outcome : ${{steps.set-results.outputs.status}}
     runs-on : ubuntu-latest
     steps   :
         - name : Get code
@@ -27,4 +27,4 @@ jobs    :
           run  : echo "Deploying and uploading ..."
         - name : set result output
           id   : set-results
-          run  : echo "output=success" >> $GITHUB_OUTPUT
+          run  : echo "status=success" >> $GITHUB_OUTPUT
